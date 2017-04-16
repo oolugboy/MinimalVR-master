@@ -12,10 +12,11 @@ ExampleApp::ExampleApp()
 
 void ExampleApp::initGl(){
 	RiftApp::initGl();
-	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.545f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	ovr_RecenterTrackingOrigin(_session);
 	cubeScene = new ColorCubeScene();
+	factory = new Model("F:/CSE190Project/MinimalVR-master/ModelAssets/factory1/factory1.obj");
 }
 
 void ExampleApp::shutdownGl(){
@@ -30,6 +31,6 @@ void ExampleApp::renderScene(const glm::mat4 & projection, const glm::mat4 & hea
 		shadersLoaded = true;
 	}
 	glUseProgram(vrShaderProgram);
-	cubeScene->render(projection, glm::inverse(headPose), vrShaderProgram);
-
+	//cubeScene->render(projection, glm::inverse(headPose), vrShaderProgram);
+	factory->draw(vrShaderProgram, projection, glm::inverse(headPose));
 }
