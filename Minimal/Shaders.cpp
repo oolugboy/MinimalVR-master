@@ -96,6 +96,11 @@ GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_pat
 	GLuint ProgramID = glCreateProgram();
 	glAttachShader(ProgramID, VertexShaderID);
 	glAttachShader(ProgramID, FragmentShaderID);
+
+	// Setup Vertex Attributes  [NEW]
+	glBindAttribLocation(ProgramID, 0, "position");
+	glBindAttribLocation(ProgramID, 1, "normal");
+
 	glLinkProgram(ProgramID);
 
 	// Check the program

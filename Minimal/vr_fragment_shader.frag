@@ -1,4 +1,4 @@
-#version 410 core
+#version 130
 
 out vec4 fragColor;
 in vec3 outColor;
