@@ -16,7 +16,7 @@ void ExampleApp::initGl(){
 	glEnable(GL_DEPTH_TEST);
 	ovr_RecenterTrackingOrigin(_session);
 	cubeScene = new ColorCubeScene();
-	factory = new Model("F:/CSE190Project/MinimalVR-master/ModelAssets/factory1/factory1.obj");
+	factory = new Factory();
 }
 
 void ExampleApp::shutdownGl(){

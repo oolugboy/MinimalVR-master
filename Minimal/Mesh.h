@@ -26,7 +26,7 @@ public:
 
 	glm::mat4 toWorld;
 	Mesh(vector<Vertex> vertices, vector<GLuint> indices, vector<Texture> textures, glm::vec3 color);
-	void draw(GLint shaderProgram, glm::mat4 projection, glm::mat4 modelView, glm::mat4 toWorld);
+	void draw(GLint shaderProgram, glm::mat4 projection, glm::mat4 modelView);
 	~Mesh();
 private:
 	/*  Render data  */

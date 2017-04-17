@@ -131,13 +131,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="airMolecule.cpp" />
+    <ClCompile Include="Co2.cpp" />
     <ClCompile Include="ColorCubeScene.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="ExampleApp.cpp" />
+    <ClCompile Include="Factory.cpp" />
     <ClCompile Include="GlfwApp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="O2.cpp" />
     <ClCompile Include="RiftApp.cpp" />
     <ClCompile Include="RiftManagerApp.cpp" />
     <ClCompile Include="Shaders.cpp" />
@@ -149,13 +153,17 @@
     <None Include="vr_vertex_shader.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="airMolecule.h" />
+    <ClInclude Include="Co2.h" />
     <ClInclude Include="ColorCubeScene.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="ExampleApp.h" />
+    <ClInclude Include="Factory.h" />
     <ClInclude Include="GlfwApp.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="O2.h" />
     <ClInclude Include="RiftApp.h" />
     <ClInclude Include="RiftManagerApp.h" />
     <ClInclude Include="Shaders.h" />

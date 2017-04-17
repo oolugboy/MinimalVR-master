@@ -1,20 +1,22 @@
 #include "Model.h"
 #include <iostream>
-#include <glm/gtc/matrix_transform.hpp>
+
 
 using namespace std;
 #include <Windows.h>
 
 Model::Model(GLchar* path)
 {
-	this->toWorld = glm::mat4(1.0f);
-	this->toWorld = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -35.0f)) * toWorld;
 	this->loadModel(path);
+}
+void Model::setToWorld(glm::mat4 toWorld)
+{
+	this->toWorld = toWorld;
 }
 void Model::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView)
 {
 	for (GLuint i = 0; i < this->meshes.size(); i++)
-		this->meshes[i].draw(shaderProgram, projection, modelView, toWorld);
+		this->meshes[i].draw(shaderProgram, projection, modelView * toWorld);
 }
 void Model::loadModel(string path)
 {	

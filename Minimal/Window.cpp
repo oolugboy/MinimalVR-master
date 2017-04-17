@@ -1,6 +1,6 @@
 #include "Window.h"
-#include "Model.h"
-Model * factory;
+#include "Factory.h"
+Factory * factory;
 
 const char* window_title = "GLFW Starter Project";
 Cube * cube;
@@ -24,7 +24,7 @@ glm::mat4 Window::V;
 void Window::initialize_objects()
 {
 	cube = new Cube();
-	factory = new Model("F:/CSE190Project/MinimalVR-master/ModelAssets/factory1/factory1.obj");
+	factory = new Factory();
 
 	// Load the shader program. Make sure you have the correct filepath up top
 	shaderProgram = LoadShaders(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);

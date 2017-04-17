@@ -10,6 +10,7 @@ public:
 	/*  Functions   */
 	Model(GLchar* path);
 	void draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView);
+	void setToWorld(glm::mat4 toWorld);
 private:
 	/*  Model Data  */
 	glm::mat4 toWorld; // Global transformation matrix

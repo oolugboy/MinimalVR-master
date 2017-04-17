@@ -7,9 +7,7 @@ Mesh::Mesh(vector<Vertex> vertices, vector<GLuint> indices, vector<Texture> text
 	this->indices = indices;
 	this->textures = textures;
 	this->color = color;
-
-	toWorld = glm::mat4(1.0f);
-	toWorld = toWorld * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+	
 	this->setupMesh();
 }
 
@@ -45,9 +43,8 @@ void Mesh::setupMesh()
 	glBindVertexArray(0);
 }
 
-void Mesh::draw(GLint shaderProgram, glm::mat4 projection, glm::mat4 modelView, glm::mat4 toWorld)
+void Mesh::draw(GLint shaderProgram, glm::mat4 projection, glm::mat4 modelView)
 {	
-	modelView = (modelView * toWorld * this->toWorld);
 	uProjection = glGetUniformLocation(shaderProgram, "projection");
 	uModelView = glGetUniformLocation(shaderProgram, "modelview");
 	uColor = glGetUniformLocation(shaderProgram, "color");
