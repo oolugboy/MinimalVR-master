@@ -161,7 +161,7 @@ void glDebugCallbackHandler(GLenum source, GLenum type, GLuint id, GLenum severi
 #include "RiftApp.h"
 #include "ColorCubeScene.h"
 #include "ExampleApp.h"
-
+//hao tu
 
 // Execute our example class
 /* The vr main */
@@ -181,8 +181,8 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	}
 	ovr_Shutdown();
 	return result;
-}*/
-
+}
+*/
 
 /////////////////////////////////////////////////////////////////////////////////////
 // For rendering without the VR
