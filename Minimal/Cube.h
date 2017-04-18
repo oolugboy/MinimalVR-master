@@ -1,36 +1,27 @@
-#ifndef _CUBE_H_
-#define _CUBE_H_
+#pragma once 
 
 #define GLFW_INCLUDE_GLEXT
-#ifdef __APPLE__
-#define GLFW_INCLUDE_GLCOREARB
-#else
+
 #include <GL/glew.h>
-#endif
-#include <GLFW/glfw3.h>
+
 // Use of degrees is deprecated. Use radians instead.
 #ifndef GLM_FORCE_RADIANS
 #define GLM_FORCE_RADIANS
 #endif
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "Geode.h"
 
-class Cube
+class Cube : public Geode
 {
 public:
-	Cube();
+	Cube(bool wired);
 	~Cube();
 
-	glm::mat4 toWorld;
-
-	void draw(GLuint);
-	void vrDraw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 pModelView);
+	
+	void draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView);
 	void update();
 	void spin(float);
-
-	// These variables are needed for the shader program
-	GLuint VBO, VAO, EBO;
-	GLuint uProjection, uModelview;
 };
 
 // Define the coordinates and indices needed to draw the cube. Note that it is not necessary
@@ -38,9 +29,9 @@ public:
 // This just looks nicer since it's easy to tell what coordinates/indices belong where.
 const GLfloat vertices[8][3] = {
 	// "Front" vertices
-	{ -0.1, -0.1,  0.1 },{ 0.1, -0.1,  0.1 },{ 0.1,  0.1,  0.1 },{ -0.1,  0.1,  0.1 },
+	{ -2.0, -2.0,  2.0 },{ 2.0, -2.0,  2.0 },{ 2.0,  2.0,  2.0 },{ -2.0,  2.0,  2.0 },
 	// "Back" vertices
-	{ -0.1, -0.1, -0.1 },{ 0.1, -0.1, -0.1 },{ 0.1,  0.1, -0.1 },{ -0.1,  0.1, -0.1 }
+	{ -2.0, -2.0, -2.0 },{ 2.0, -2.0, -2.0 },{ 2.0,  2.0, -2.0 },{ -2.0,  2.0, -2.0 }
 };
 
 // Note that GL_QUADS is deprecated in modern OpenGL (and removed from OSX systems).
@@ -60,4 +51,3 @@ const GLuint indices[6][6] = {
 	{ 3, 2, 6, 6, 7, 3 }
 };
 
-#endif

@@ -136,7 +136,8 @@
     <ClCompile Include="ColorCubeScene.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="ExampleApp.cpp" />
-    <ClCompile Include="Factory.cpp" />
+    <ClCompile Include="FactoryScene.cpp" />
+    <ClCompile Include="Geode.cpp" />
     <ClCompile Include="GlfwApp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -145,6 +146,7 @@
     <ClCompile Include="RiftApp.cpp" />
     <ClCompile Include="RiftManagerApp.cpp" />
     <ClCompile Include="Shaders.cpp" />
+    <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,7 +160,8 @@
     <ClInclude Include="ColorCubeScene.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="ExampleApp.h" />
-    <ClInclude Include="Factory.h" />
+    <ClInclude Include="FactoryScene.h" />
+    <ClInclude Include="Geode.h" />
     <ClInclude Include="GlfwApp.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Mesh.h" />
@@ -167,6 +170,7 @@
     <ClInclude Include="RiftApp.h" />
     <ClInclude Include="RiftManagerApp.h" />
     <ClInclude Include="Shaders.h" />
+    <ClInclude Include="Sphere.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

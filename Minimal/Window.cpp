@@ -1,10 +1,13 @@
 #include "Window.h"
-#include "Factory.h"
-Factory * factory;
+#include "FactoryScene.h"
+#include <time.h>
+FactoryScene * factoryScene;
 
 const char* window_title = "GLFW Starter Project";
 Cube * cube;
 GLint shaderProgram;
+
+float currTime, prevTime, prevSpawnTime;
 
 // On some systems you need to change this to the absolute path
 #define VERTEX_SHADER_PATH "./vr_vertex_shader.vert"
@@ -23,8 +26,9 @@ glm::mat4 Window::V;
 
 void Window::initialize_objects()
 {
-	cube = new Cube();
-	factory = new Factory();
+	cube = new Cube(false);
+	factoryScene = new FactoryScene();
+	prevSpawnTime = currTime = prevTime = ((float)clock() / CLOCKS_PER_SEC);
 
 	// Load the shader program. Make sure you have the correct filepath up top
 	shaderProgram = LoadShaders(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
@@ -112,9 +116,20 @@ void Window::display_callback(GLFWwindow* window)
 	// Use the shader of programID
 	glUseProgram(shaderProgram);
 
+	float currTime = ((float)clock() / CLOCKS_PER_SEC);
+
 	// Render the cube
-//	cube->draw(shaderProgram);
-	factory->draw(shaderProgram, P, V);
+	//	cube->draw(shaderProgram);
+	/* Spawn a new molecule after 2 seconds */
+	if (currTime - prevSpawnTime > 2.0f)
+	{
+		cout << " The currTime " << currTime << " the prevSpawn " << prevSpawnTime << endl;
+		factoryScene->spawnNewMolecule();
+		prevSpawnTime = currTime;
+	}
+
+	factoryScene->draw(shaderProgram, P, V, currTime - prevTime);
+	prevTime = currTime;
 
 	// Gets events, including input such as keyboard and mouse or window resizing
 	glfwPollEvents();

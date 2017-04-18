@@ -2,7 +2,7 @@
 #include "RiftApp.h"
 #include "ColorCubeScene.h"
 #include "Shaders.h"
-#include "Factory.h"
+#include "FactoryScene.h"
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -13,7 +13,7 @@
 class ExampleApp : public RiftApp {
 	ColorCubeScene * cubeScene;
 	GLint vrShaderProgram;
-	Factory * factory;
+	FactoryScene * factoryScene;
 
 public:
 	ExampleApp();
@@ -21,6 +21,8 @@ public:
 	protected:
 	void initGl() override;
 	void shutdownGl() override; 
-
+	float prevSpawnTime;
+	float prevTime;
+	float currTime;
 	void renderScene(const glm::mat4 & projection, const glm::mat4 & headPose) override;
 };
