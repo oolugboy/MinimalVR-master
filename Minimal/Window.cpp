@@ -1,6 +1,7 @@
 #include "Window.h"
 #include "FactoryScene.h"
 #include <time.h>
+
 FactoryScene * factoryScene;
 
 const char* window_title = "GLFW Starter Project";
