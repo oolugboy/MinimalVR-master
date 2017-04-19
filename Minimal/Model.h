@@ -11,6 +11,7 @@ public:
 	Model(GLchar* path);
 	void draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView);
 	void setToWorld(glm::mat4 toWorld);
+	void spin(float deg, glm::vec3 axis);
 private:
 	/*  Model Data  */
 	glm::mat4 toWorld; // Global transformation matrix
@@ -21,6 +22,7 @@ private:
 	void processNode(aiNode* node, const aiScene* scene);
 	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 	vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
+
 	~Model();
 };
 

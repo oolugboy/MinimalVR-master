@@ -12,6 +12,9 @@ class Sphere : public Geode
 {
 public:
 	Sphere(float radius, bool wired);
+	void setToWorld(glm::mat4 toWorld);
+	glm::vec3 getCurrPos();
+	float getRadius();
 	void draw(GLint shaderProgram, glm::mat4 projection, glm::mat4 modelView);
 	void genVertices();
 	void genIndices();

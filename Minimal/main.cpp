@@ -152,7 +152,6 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 		if (!OVR_SUCCESS(ovr_Initialize(nullptr))) {
 			FAIL("Failed to initialize the Oculus SDK");
 		}
-
 		result = ExampleApp().run();
 	}
 	catch (std::exception & error) {

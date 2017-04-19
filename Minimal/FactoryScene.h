@@ -18,16 +18,17 @@ public:
 	void initMoleculesPosition();
 	void initMolecules();
 	void spawnNewMolecule();
+	vector< airMolecule * > airMolecules; //Temp
 	
 private:
 	Model * factoryModel;
 	glm::mat4 toWorld;
-	vector< airMolecule * > airMolecules;
+
 	Model * cO2Model;
 	Model * o2Model;
 	Sphere * genSphere;
 	Cube * boundCube;
-	const int numMolecules = 5;	
+	const int numMolecules = 1;	
 	int numInSceneMolecules;
 };
 

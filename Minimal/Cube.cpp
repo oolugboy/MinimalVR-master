@@ -41,6 +41,9 @@ Cube::Cube(bool wired)
 	// Unbind the VAO now so we don't accidentally tamper with it.
 	// NOTE: You must NEVER unbind the element array buffer associated with a VAO!
 	glBindVertexArray(0);
+
+	xMax = yMax = zMax = 2.0f; 
+	xMin = yMin = zMin = -2.0f;
 }
 
 Cube::~Cube()
@@ -52,10 +55,25 @@ Cube::~Cube()
 	glDeleteBuffers(1, &EBO);
 }
 
+void Cube::setToWorld(glm::mat4 toWorld)
+{
+	this->toWorld = toWorld;
+	this->toWorld = this->toWorld * glm::scale(glm::mat4(1.0f), scaleVal);
+	cout << " The cube scale is " << toWorld[0][0] << endl;
+	scaleBoundaries();
+}
+
+void Cube::scaleBoundaries()
+{
+	xMax = (xMax * toWorld[0][0]) + toWorld[3][0]; 
+	xMin = (xMin * toWorld[0][0]) + toWorld[3][0];	
+	yMax = (yMax * toWorld[0][0]) + toWorld[3][1]; 
+	yMin = (yMin * toWorld[0][0]) + toWorld[3][1];
+	zMax = (zMax * toWorld[0][0]) + toWorld[3][2]; 
+	zMin = (zMin * toWorld[0][0]) + toWorld[3][2];
+}
 void Cube::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView)
 {
-	cout << " In the cube draw " << endl;
-	cout << " The xScale " << toWorld[0][0] << endl;
 	modelView = modelView * toWorld;
 	uProjection = glGetUniformLocation(shaderProgram, "projection");
 	uModelView = glGetUniformLocation(shaderProgram, "modelview");
@@ -64,7 +82,7 @@ void Cube::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView)
 	// Now send these values to the shader program
 	glUniformMatrix4fv(uProjection, 1, GL_FALSE, &(projection[0][0]));
 	glUniformMatrix4fv(uModelView, 1, GL_FALSE, &(modelView[0][0]));
-	glUniform3f(uColor, 1.0f, 1.0f, 1.0f);
+	glUniform3f(uColor, 1.0f, 0.0f, 0.0f);
 
 	// Now draw the cube. We simply need to bind the VAO associated with it.
 	glBindVertexArray(VAO);
@@ -83,7 +101,24 @@ void Cube::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView)
 	// Unbind the VAO when we're done so we don't accidentally draw extra stuff or tamper with its bound buffers
 	glBindVertexArray(0);
 }
-
+void Cube::factorSphereCollision(glm::vec3 pos, float radius, glm::vec3 & velocity)
+{
+	if (pos.x + radius >= xMax || pos.x - radius <= xMin)
+	{
+		cout << " collided x " << endl;
+		velocity.x *= -1.0f;
+	}
+	if (pos.y + radius >= yMax || pos.y - radius <= yMin)
+	{
+		cout << " collided y " << endl;
+		velocity.y *= -1.0f;	
+	}
+	if (pos.z + radius >= zMax || pos.z - radius <= zMin)
+	{
+		cout << " collided z " << endl;
+		velocity.z *= -1.0f;
+	}
+}
 void Cube::update()
 {
 	spin(1.0f);

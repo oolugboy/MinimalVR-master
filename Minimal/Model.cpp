@@ -1,5 +1,6 @@
 #include "Model.h"
 #include <iostream>
+#include <glm/gtc/matrix_transform.hpp>
 
 
 using namespace std;
@@ -93,6 +94,11 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		color.z = diffuseColor.b;		
 	}
 	return Mesh(vertices, indices, textures, color);
+}
+void Model::spin(float deg, glm::vec3 axis)
+{
+	// If you haven't figured it out from the last project, this is how you fix spin's behavior
+	toWorld = toWorld * glm::rotate(glm::mat4(1.0f), deg / 180.0f * glm::pi<float>(), axis);
 }
 Model::~Model()
 {

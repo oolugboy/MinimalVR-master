@@ -3,8 +3,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
-
-
 FactoryScene::FactoryScene()
 {
 	factoryModel = new Model("../ModelAssets/factory1/factory1.obj");
@@ -16,10 +14,11 @@ FactoryScene::FactoryScene()
 	o2Model = new Model("../ModelAssets/o2/o2.obj");
 	cO2Model = new Model("../ModelAssets/co2/co2.obj");
 
-	genSphere = new Sphere(4.0f, true);
+	genSphere = new Sphere(3.0f, true);
 
 	boundCube = new Cube(true);
-	boundCube->scaleVal = glm::vec3(50000.0f, 50000.0f, 50000.0f);
+	boundCube->scaleVal = glm::vec3(20.0f, 20.0f, 20.0f);
+	boundCube->isCube = true;
 	boundCube->setToWorld(toWorld);
 	
 	initMolecules();
@@ -59,6 +58,11 @@ void FactoryScene::drawMolecules(GLuint shaderProgram, glm::mat4 projection, glm
 	{
 		if(airMolecules[i]->inScene)
 		{
+			glm::vec3 currPos = airMolecules[i]->position;
+			/* Doesnt matter which radius because all the radi are the same */
+			float radius = airMolecules[i]->sphere->getRadius();
+	
+			boundCube->factorSphereCollision(currPos, radius, airMolecules[i]->velocity);
 			airMolecules[i]->updateAndDraw(shaderProgram, projection, modelView, deltaT);
 		}
 		//TODO : consider the breaking optimization

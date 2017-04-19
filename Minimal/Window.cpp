@@ -29,6 +29,7 @@ void Window::initialize_objects()
 {
 	cube = new Cube(false);
 	factoryScene = new FactoryScene();
+
 	prevSpawnTime = currTime = prevTime = ((float)clock() / CLOCKS_PER_SEC);
 
 	// Load the shader program. Make sure you have the correct filepath up top
@@ -128,6 +129,7 @@ void Window::display_callback(GLFWwindow* window)
 		factoryScene->spawnNewMolecule();
 		prevSpawnTime = currTime;
 	}
+
 
 	factoryScene->draw(shaderProgram, P, V, currTime - prevTime);
 	prevTime = currTime;

@@ -3,10 +3,10 @@
 
 using namespace std;
 
+bool radiusSet = false;
+
 Sphere::Sphere(float radius, bool wired)
 {
-
-	toWorld = glm::mat4(1.0f); // Scale the toWorld accordingly 
 	/* Set the number of longitudes and latitudes */
 	latNum = 5;
 	longNum = 5;
@@ -75,7 +75,14 @@ void Sphere::genVertices()
 		}
 	}
 }
-
+glm::vec3 Sphere::getCurrPos()
+{
+	return currPos;
+}
+float Sphere::getRadius()
+{
+	return m_radius;
+}
 void Sphere::genIndices()
 {
 	for (int i = 0; i < latNum; i++)
@@ -95,6 +102,18 @@ void Sphere::genIndices()
 	}
 }
 
+void Sphere::setToWorld(glm::mat4 toWorld)
+{
+	this->toWorld = toWorld;
+	if (!radiusSet)
+	{
+		this->m_radius = m_radius * toWorld[0][0]; // Assumes uniform scale
+		radiusSet = true;
+	}
+	//cout << " The radius being set is " << m_radius << endl;
+	this->currPos = glm::vec3(toWorld[3]);	
+	this->toWorld = this->toWorld * glm::scale(glm::mat4(1.0f), scaleVal);
+}
 /* Draw the sphere mainly for debugging purposes */
 void Sphere::draw(GLint shaderProgram, glm::mat4 projection, glm::mat4 modelView)
 {
