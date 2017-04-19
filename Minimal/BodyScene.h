@@ -11,7 +11,7 @@ class BodyScene
 public:
 	BodyScene();
 	~BodyScene();
-	void draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view, glm::vec3 headPos, glm::vec3 handLPos, glm::vec3 handRPos, float deltaT);
+	void draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view, glm::vec3 handLPos, glm::vec3 handRPos, float deltaT);
 	void drawHands(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view);
 	void drawLasers(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view, float deltaT);
 	void initLasersPosition();
