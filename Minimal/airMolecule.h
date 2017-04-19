@@ -19,5 +19,7 @@ public:
 	Model * model;
 	Sphere * sphere;
 private:
+	glm::vec3 spinAxis;
+	float deg;
 };
 

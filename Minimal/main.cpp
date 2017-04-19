@@ -145,14 +145,13 @@ void glDebugCallbackHandler(GLenum source, GLenum type, GLuint id, GLenum severi
 
 // Execute our example class
 /* The vr main */
-/*
+
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	int result = -1;
 	try {
 		if (!OVR_SUCCESS(ovr_Initialize(nullptr))) {
 			FAIL("Failed to initialize the Oculus SDK");
 		}
-
 		result = ExampleApp().run();
 	}
 	catch (std::exception & error) {
@@ -162,7 +161,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	ovr_Shutdown();
 	return result;
 }
-*/
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 // For rendering without the VR
@@ -232,7 +231,7 @@ void print_versions()
 #endif
 }
 /* Regular window main */
-
+/*
 int main(void)
 {
 	// Create the GLFW window
@@ -263,3 +262,4 @@ int main(void)
 
 	exit(EXIT_SUCCESS);
 } 
+*/

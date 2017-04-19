@@ -17,11 +17,13 @@ class Cube : public Geode
 public:
 	Cube(bool wired);
 	~Cube();
-
-	
+	void setToWorld(glm::mat4 toWorld);	
 	void draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView);
 	void update();
 	void spin(float);
+	void scaleBoundaries();
+	void factorSphereCollision(glm::vec3 pos, float radius, glm::vec3 & velocity);
+	float xMax, xMin, yMax, yMin, zMax, zMin;
 };
 
 // Define the coordinates and indices needed to draw the cube. Note that it is not necessary
