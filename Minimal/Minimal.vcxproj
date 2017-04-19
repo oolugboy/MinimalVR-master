@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="airMolecule.cpp" />
+    <ClCompile Include="BodyScene.cpp" />
     <ClCompile Include="Co2.cpp" />
     <ClCompile Include="ColorCubeScene.cpp" />
     <ClCompile Include="Cube.cpp" />
@@ -156,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="airMolecule.h" />
+    <ClInclude Include="BodyScene.h" />
     <ClInclude Include="Co2.h" />
     <ClInclude Include="ColorCubeScene.h" />
     <ClInclude Include="Cube.h" />

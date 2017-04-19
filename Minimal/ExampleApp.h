@@ -3,6 +3,7 @@
 #include "ColorCubeScene.h"
 #include "Shaders.h"
 #include "FactoryScene.h"
+#include "BodyScene.h"
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -14,7 +15,7 @@ class ExampleApp : public RiftApp {
 	ColorCubeScene * cubeScene;
 	GLint vrShaderProgram;
 	FactoryScene * factoryScene;
-
+	BodyScene * bodyScene;
 public:
 	ExampleApp();
 

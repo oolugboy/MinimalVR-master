@@ -7,7 +7,7 @@ FactoryScene::FactoryScene()
 {
 	factoryModel = new Model("../ModelAssets/factory1/factory1.obj");
 	toWorld = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -35.0f));
-	toWorld = toWorld * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+	toWorld = toWorld * glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
 	factoryModel->setToWorld(toWorld);
 

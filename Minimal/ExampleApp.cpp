@@ -18,6 +18,7 @@ void ExampleApp::initGl(){
 	ovr_RecenterTrackingOrigin(_session);
 	cubeScene = new ColorCubeScene();
 	factoryScene = new FactoryScene();
+	bodyScene = new BodyScene();
 }
 
 void ExampleApp::shutdownGl(){
@@ -44,34 +45,47 @@ void ExampleApp::renderScene(const glm::mat4 & projection, const glm::mat4 & hea
 	ovrTrackingState trackState = ovr_GetTrackingState(_session, displayMidpointSeconds, ovrTrue);
 
 	//two touch controller position, getting from trackState, each ovrPosef contains a vec4 orientation, vec3 position
-	ovrPosef handPoses[2];
+	ovrPosef handLPosef;
+	ovrPosef handRPosef;
 	ovrInputState inputState;
+	
+	ovrPosef headPosef = trackState.HeadPose.ThePose;
 
-	// 0 is left, 1 is right
-	handPoses[0] = trackState.HandPoses[ovrHand_Left].ThePose;
-	handPoses[1] = trackState.HandPoses[ovrHand_Right].ThePose;
-
-	//test left hand position
-	bool leftHandHigh = false;
-	if (handPoses[0].Position.y > 1.0f) {
-		leftHandHigh = true;
-	}
-
-	bool leftHandTriggerPressed = true;
-
+	handLPosef = trackState.HandPoses[ovrHand_Left].ThePose;
+	handRPosef = trackState.HandPoses[ovrHand_Right].ThePose;
+	
+	bool leftHandTriggerPressed = false;
+	bool rightHandTriggerPressed = false;
 	if (OVR_SUCCESS(ovr_GetInputState(_session, ovrControllerType_Touch, &inputState))) {
 		if (inputState.HandTrigger[ovrHand_Left] > 0.5f) {
-			leftHandTriggerPressed = true;
+			ovr_SetControllerVibration(_session, ovrControllerType_LTouch, 0.0f, 1.0f);
+		}
+		else {
+			ovr_SetControllerVibration(_session, ovrControllerType_LTouch, 0.0f, 0.0f);
+		}
+	}
+
+	if (OVR_SUCCESS(ovr_GetInputState(_session, ovrControllerType_Touch, &inputState))) {
+		if (inputState.HandTrigger[ovrHand_Right] > 0.5f) {
+			ovr_SetControllerVibration(_session, ovrControllerType_RTouch, 0.0f, 1.0f);
+		}
+		else {
+			ovr_SetControllerVibration(_session, ovrControllerType_RTouch, 0.0f, 0.0f);
 		}
 	}
 
 
-	if (leftHandHigh && leftHandTriggerPressed) {
-		ovr_SetControllerVibration(_session, ovrControllerType_LTouch, 0.0f, 1.0f);
-	}
-	else {
-		ovr_SetControllerVibration(_session, ovrControllerType_LTouch, 0.0f, 0.0f);
-	}
+
+	//reset yaw position with headset value
+	//float yaw;
+
+	//trackState.HeadPose.ThePose.Orientation.GetEulerAngles<>
+
+	//ovrVector2f leftStick = inputState.Thumbstick[ovrHand_Left];
+	//ovrVector2f rightStick = inputState.Thumbstick[ovrHand_Right];
+
+	//headPose += glm::rotateY(ovr)
+
 
 	/* Spawn a new molecule after 2 seconds */
 	if (currTime - prevSpawnTime > 2.0f)
@@ -82,5 +96,13 @@ void ExampleApp::renderScene(const glm::mat4 & projection, const glm::mat4 & hea
 
 	/* draw the factory scene */
 	factoryScene->draw(vrShaderProgram, projection, glm::inverse(headPose), currTime - prevTime);
+	
+	glm::vec3 headPos(headPosef.Position.x, headPosef.Position.y, headPosef.Position.z);
+	glm::vec3 handLPos(handLPosef.Position.x, handLPosef.Position.y, handLPosef.Position.z);
+	glm::vec3 handRPos(handRPosef.Position.x, handRPosef.Position.y, handRPosef.Position.z);
+
+	/*draw the body scene, hand and laser*/
+	bodyScene->draw(vrShaderProgram, projection, glm::inverse(headPose), headPos, handLPos, handRPos, currTime - prevTime);
+
 	prevTime = currTime;
 }
