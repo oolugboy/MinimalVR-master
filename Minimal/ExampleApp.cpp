@@ -74,19 +74,6 @@ void ExampleApp::renderScene(const glm::mat4 & projection, const glm::mat4 & hea
 		}
 	}
 
-
-
-	//reset yaw position with headset value
-	//float yaw;
-
-	//trackState.HeadPose.ThePose.Orientation.GetEulerAngles<>
-
-	//ovrVector2f leftStick = inputState.Thumbstick[ovrHand_Left];
-	//ovrVector2f rightStick = inputState.Thumbstick[ovrHand_Right];
-
-	//headPose += glm::rotateY(ovr)
-
-
 	/* Spawn a new molecule after 2 seconds */
 	if (currTime - prevSpawnTime > 2.0f)
 	{
@@ -97,12 +84,15 @@ void ExampleApp::renderScene(const glm::mat4 & projection, const glm::mat4 & hea
 	/* draw the factory scene */
 	factoryScene->draw(vrShaderProgram, projection, glm::inverse(headPose), currTime - prevTime);
 	
-	glm::vec3 headPos(headPosef.Position.x, headPosef.Position.y, headPosef.Position.z);
+	//since hands are in same orientation with the head, we pass the position and later use it to translate the hand object
 	glm::vec3 handLPos(handLPosef.Position.x, handLPosef.Position.y, handLPosef.Position.z);
 	glm::vec3 handRPos(handRPosef.Position.x, handRPosef.Position.y, handRPosef.Position.z);
 
+
+	//TODO:: for hand shooting, try to do Euler angle
+
 	/*draw the body scene, hand and laser*/
-	bodyScene->draw(vrShaderProgram, projection, glm::inverse(headPose), headPos, handLPos, handRPos, currTime - prevTime);
+	bodyScene->draw(vrShaderProgram, projection, glm::inverse(headPose), handLPos, handRPos, currTime - prevTime);
 
 	prevTime = currTime;
 }

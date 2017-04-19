@@ -12,11 +12,13 @@ BodyScene::BodyScene()
 	initLasersPosition();
 }
 
-void BodyScene::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view, glm::vec3 headPos, glm::vec3 handLPos, glm::vec3 handRPos, float deltaT)
+void BodyScene::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view, glm::vec3 handLPos, glm::vec3 handRPos, float deltaT)
 {
-	toLeft = glm::translate(glm::mat4(1.0f), handLPos - headPos);
-	toRight = glm::translate(glm::mat4(1.0f), handRPos - headPos);
-	/* Update the hand to new position*/
+	//similar to toWorld matrix in airMolecule file
+	toLeft = glm::translate(glm::mat4(1.0f), handLPos);
+	toRight = glm::translate(glm::mat4(1.0f), handRPos);
+
+	/* Update the model matrix*/
 	leftHand->setToWorld(toLeft);
 	rightHand->setToWorld(toRight);
 
