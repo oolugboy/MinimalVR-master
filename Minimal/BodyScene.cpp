@@ -9,7 +9,7 @@ BodyScene::BodyScene()
 	rightHand = new Sphere(0.02f, false);
 
 	leftLaser = new Line(glm::vec3(0,0,0));
-
+	rightLaser = new Line(glm::vec3(0,0,0));
 	//TODO fill in laser with cylinder model
 	initLasersPosition();
 }
@@ -30,8 +30,11 @@ void BodyScene::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view,
 
 	drawHands(shaderProgram, projection, view);
 
-	leftLaser->setToWorld(toLLaser);
-	rightLaser->setToWorld(toRLaser);
+	//leftLaser->setToWorld(toLLaser);
+	//rightLaser->setToWorld(toRLaser);
+
+	leftLaser->setToWorld(toLeft);
+	rightLaser->setToWorld(toRight);
 
 	drawLasers(shaderProgram, projection, view);
 

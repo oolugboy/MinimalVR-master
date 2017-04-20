@@ -5,6 +5,7 @@
 #include "O2.h"
 #include <vector>
 #include "Cube.h"
+#include "Line.h"
 
 using namespace std;
 
@@ -35,5 +36,6 @@ private:
 	bool renderedEndScene;
 	const int numMolecules = 100;	
 	int numInSceneMolecules;
+	Line * testLine;
 };
 

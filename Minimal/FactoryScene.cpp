@@ -9,7 +9,11 @@ FactoryScene::FactoryScene()
 	toWorld = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -35.0f));
 	toWorld = toWorld * glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
+	testLine = new Line(glm::vec3(0.0f, 0.0f, 0.0f));
+	testLine->setToWorld(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -35.0f)));
+
 	factoryModel->setToWorld(toWorld);
+	
 
 	o2Model = new Model("../ModelAssets/o2/o2.obj");
 	cO2Model = new Model("../ModelAssets/co2/co2.obj");
@@ -56,6 +60,7 @@ void FactoryScene::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 mo
 	factoryModel->draw(shaderProgram, projection, modelView);
 	drawMolecules(shaderProgram, projection, modelView);
 	boundCube->draw(shaderProgram, projection, modelView);
+	testLine->draw(shaderProgram, projection, modelView);
 }
 
 void FactoryScene::initMolecules()

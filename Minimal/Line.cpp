@@ -1,11 +1,12 @@
 #include "Line.h"
+#include <iostream>
 
 
 
 Line::Line(glm::vec3 start)
 {
 	this->start = start;
-	this->end = this->start + glm::vec3(0.0f, 0.0f, -40.0f);
+	this->end = this->start + glm::vec3(0.0f, 40.0f,0.0f);
 	vertices.push_back(this->start);
 	vertices.push_back(this->end);
 	this->dir = glm::normalize(end - start);
@@ -18,7 +19,6 @@ void Line::loadLineVertices()
 	// Create array object and buffers. Remember to delete your buffers when the object is destroyed!
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
 
 	// Bind the Vertex Array Object (VAO) first, then bind the associated buffers to it.
 	// Consider the VAO as a container for all your buffers.
@@ -29,7 +29,7 @@ void Line::loadLineVertices()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	// glBufferData populates the most recently bound buffer with data starting at the 3rd argument and ending after
 	// the 2nd argument number of indices. How does OpenGL know how long an index spans? Go to glVertexAttribPointer.
-	glBufferData(GL_ARRAY_BUFFER, vertNum, &(vertices[0]), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &(vertices[0]), GL_STATIC_DRAW);
 	// Enable the usage of layout location 0 (check the vertex shader to see what this is)
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0,// This first parameter x should be the same as the number passed into the line "layout (location = x)" in the vertex shader. In this case, it's 0. Valid values are 0 to GL_MAX_UNIFORM_LOCATIONS.
@@ -53,6 +53,7 @@ void Line::setToWorld(glm::mat4 toWorld)
 
 void Line::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView)
 {
+	cout << " drawing line "<< endl;
 	modelView = modelView * toWorld;
 	uProjection = glGetUniformLocation(shaderProgram, "projection");
 	uModelView = glGetUniformLocation(shaderProgram, "modelview");
@@ -61,7 +62,7 @@ void Line::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView)
 	// Now send these values to the shader program
 	glUniformMatrix4fv(uProjection, 1, GL_FALSE, &(projection[0][0]));
 	glUniformMatrix4fv(uModelView, 1, GL_FALSE, &(modelView[0][0]));
-	glUniform3f(uColor, color.x, color.y, color.z);
+	glUniform3f(uColor, 1.0f, 1.0f, 1.0f);
 
 	// Now draw the cube. We simply need to bind the VAO associated with it.
 	glBindVertexArray(VAO);
