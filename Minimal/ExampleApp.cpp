@@ -24,10 +24,22 @@ void ExampleApp::shutdownGl(){
 	delete(cubeScene);
 }
 
-void ExampleApp::renderScene(const glm::mat4 & projection, const glm::mat4 & headPose){
-
+void ExampleApp::update()
+{
 	float currTime = ((float)clock() / CLOCKS_PER_SEC);
 
+	/* Spawn a new molecule after 2 seconds */
+	if (currTime - prevSpawnTime > 2.0f)
+	{
+		factoryScene->spawnNewMolecule();
+		prevSpawnTime = currTime;
+	}
+
+	factoryScene->update(currTime - prevTime);
+	prevTime = currTime;
+}
+void ExampleApp::renderScene(const glm::mat4 & projection, const glm::mat4 & headPose)
+{
 	/* Load the shader program */
 	if(shadersLoaded == false)
 	{
@@ -37,14 +49,6 @@ void ExampleApp::renderScene(const glm::mat4 & projection, const glm::mat4 & hea
 	glUseProgram(vrShaderProgram);
 	//cubeScene->render(projection, glm::inverse(headPose), vrShaderProgram);
 
-	/* Spawn a new molecule after 2 seconds */
-	if (currTime - prevSpawnTime > 2.0f)
-	{
-		factoryScene->spawnNewMolecule();
-		prevSpawnTime = currTime;
-	}
-
 	/* draw the factory scene */
-	factoryScene->draw(vrShaderProgram, projection, glm::inverse(headPose), currTime - prevTime);
-	prevTime = currTime;
+	factoryScene->draw(vrShaderProgram, projection, glm::inverse(headPose));
 }

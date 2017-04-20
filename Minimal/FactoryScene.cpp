@@ -24,20 +24,37 @@ FactoryScene::FactoryScene()
 	initMolecules();
 	initMoleculesPosition();
 
-	numInSceneMolecules = 1;
+	gameRunning = true;
+	gameLost = false;
+	renderedEndScene = false;
+}
+void FactoryScene::update(float deltaT)
+{
+	if (!renderedEndScene)
+	{
+		updateMolecules(deltaT);
+		if (numInSceneMolecules >= 4)
+		{
+			gameRunning = false;
+			gameLost = true;
+		}
+	}
 }
 void FactoryScene::spawnNewMolecule()
 {
-	if (numInSceneMolecules < numMolecules)
+	if (gameRunning)
 	{
-		airMolecules[numInSceneMolecules]->inScene = true;
-		numInSceneMolecules++;
+		if (numInSceneMolecules < numMolecules)
+		{
+			airMolecules[numInSceneMolecules]->inScene = true;
+			numInSceneMolecules++;
+		}
 	}
 }
-void FactoryScene::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView, float deltaT)
+void FactoryScene::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView)
 {
 	factoryModel->draw(shaderProgram, projection, modelView);
-	drawMolecules(shaderProgram, projection, modelView, deltaT);
+	drawMolecules(shaderProgram, projection, modelView);
 	boundCube->draw(shaderProgram, projection, modelView);
 }
 
@@ -52,20 +69,61 @@ void FactoryScene::initMolecules()
 		airMolecules.push_back(co2Mol);		
 	}
 }
-void FactoryScene::drawMolecules(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView, float deltaT)
+void FactoryScene::restartScene()
+{
+	if (gameRunning == false)
+	{
+		glClearColor(0.0f, 0.0f, 0.545f, 1.0f);
+		initMoleculesPosition();
+		gameRunning = true;
+		gameLost = false;
+		renderedEndScene = false;
+	}
+}
+void FactoryScene::updateMolecules(float deltaT)
+{
+	for (int i = 0; i < numMolecules; i++)
+	{
+		if (gameRunning)
+		{
+			if (airMolecules[i]->inScene)
+			{
+				glm::vec3 currPos = airMolecules[i]->position;
+				/* Doesnt matter which radius because all the radi are the same */
+				float radius = airMolecules[i]->sphere->getRadius();
+
+				boundCube->factorSphereCollision(currPos, radius, airMolecules[i]->velocity);
+				airMolecules[i]->update(deltaT);
+			}
+		}
+		else
+		{
+			if (gameLost)
+			{
+				airMolecules[i]->inScene = true;
+				airMolecules[i]->randPositon();
+			}
+			else
+			{
+				airMolecules[i]->inScene = false;
+				if (renderedEndScene == false)
+				{
+					glClearColor(0.678f, 0.847f, 0.902f, 1.0f);
+				}
+			}
+			/* Premature boolean set does not hurt */
+			renderedEndScene = true;
+		}
+	}
+}
+void FactoryScene::drawMolecules(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView)
 {
 	for (int i = 0; i < numMolecules; i++)
 	{
 		if(airMolecules[i]->inScene)
 		{
-			glm::vec3 currPos = airMolecules[i]->position;
-			/* Doesnt matter which radius because all the radi are the same */
-			float radius = airMolecules[i]->sphere->getRadius();
-	
-			boundCube->factorSphereCollision(currPos, radius, airMolecules[i]->velocity);
-			airMolecules[i]->updateAndDraw(shaderProgram, projection, modelView, deltaT);
+			airMolecules[i]->draw(shaderProgram, projection, modelView);
 		}
-		//TODO : consider the breaking optimization
 	}
 }
 void FactoryScene::initMoleculesPosition()
@@ -73,12 +131,14 @@ void FactoryScene::initMoleculesPosition()
 	glm::mat4 offset = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.1f, 0.0f));
 	for (int i = 0; i < numMolecules; i++)
 	{
+		airMolecules[i]->inScene = false;
 		airMolecules[i]->initWorld(toWorld * offset);
 	}
 	/* For the first molecule in the scene */
 	if (numMolecules > 0)
 	{
 		airMolecules[0]->inScene = true;
+		numInSceneMolecules = 1;
 	}
 }
 FactoryScene::~FactoryScene()
