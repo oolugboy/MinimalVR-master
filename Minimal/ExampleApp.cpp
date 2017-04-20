@@ -95,9 +95,13 @@ void ExampleApp::renderScene(const glm::mat4 & projection, const glm::mat4 & hea
 	glm::vec3 handLPos(handLPosef.Position.x, handLPosef.Position.y, handLPosef.Position.z);
 	glm::vec3 handRPos(handRPosef.Position.x, handRPosef.Position.y, handRPosef.Position.z);
 
-
 	//TODO:: for hand shooting, try to do Euler angle
+	quat myQuatL(handLPosef.Orientation.w, handLPosef.Orientation.x, handLPosef.Orientation.y, handLPosef.Orientation.z);
+	quat myQuatR(handRPosef.Orientation.w, handRPosef.Orientation.x, handRPosef.Orientation.y, handRPosef.Orientation.z);
+	mat4 rotationL = glm::toMat4(myQuatL);
+	mat4 rotationR = glm::toMat4(myQuatR);
+
 
 	/*draw the body scene, hand and laser*/
-	bodyScene->draw(vrShaderProgram, projection, glm::inverse(headPose), handLPos, handRPos, currTime - prevTime);
+	bodyScene->draw(vrShaderProgram, projection, glm::inverse(headPose), handLPos, handRPos, rotationL, rotationR, currTime - prevTime);
 }

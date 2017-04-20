@@ -140,6 +140,7 @@
     <ClCompile Include="FactoryScene.cpp" />
     <ClCompile Include="Geode.cpp" />
     <ClCompile Include="GlfwApp.cpp" />
+    <ClCompile Include="Line.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="FactoryScene.h" />
     <ClInclude Include="Geode.h" />
     <ClInclude Include="GlfwApp.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />

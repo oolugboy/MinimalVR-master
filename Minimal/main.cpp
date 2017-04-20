@@ -145,7 +145,7 @@ void glDebugCallbackHandler(GLenum source, GLenum type, GLuint id, GLenum severi
 
 // Execute our example class
 /* The vr main */
-/*
+
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	int result = -1;
 	try {
@@ -160,7 +160,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	}
 	ovr_Shutdown();
 	return result;
-}*/
+}
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -232,7 +232,7 @@ void print_versions()
 }
 /* Regular window main */
 
-
+/*
 int main(void)
 {
 	// Create the GLFW window
@@ -263,3 +263,4 @@ int main(void)
 
 	exit(EXIT_SUCCESS);
 } 
+*/

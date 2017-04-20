@@ -4,6 +4,7 @@
 #include <vector>
 #include <OVR_CAPI.h>
 #include <OVR_CAPI_GL.h>
+#include "Line.h"
 using namespace std;
 
 class BodyScene
@@ -11,9 +12,10 @@ class BodyScene
 public:
 	BodyScene();
 	~BodyScene();
-	void draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view, glm::vec3 handLPos, glm::vec3 handRPos, float deltaT);
+	void draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view, glm::vec3 handLPos, glm::vec3 handRPos, 
+			  glm::mat4 rotationL, glm::mat4 rotationR, float deltaT);
 	void drawHands(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view);
-	void drawLasers(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view, float deltaT);
+	void drawLasers(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view);
 	void initLasersPosition();
 	//vector< airMolecule * > airMolecules; //Temp
 
@@ -25,6 +27,8 @@ private:
 	Sphere * rightHand;
 
 	//TODO cyclinder * laser
+	Line * leftLaser;
+	Line * rightLaser;
 
 	const int numMolecules = 1;
 	int numInSceneMolecules;
