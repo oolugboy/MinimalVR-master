@@ -22,6 +22,7 @@ public:
 	protected:
 	void initGl() override;
 	void shutdownGl() override; 
+	void update() override;
 	float prevSpawnTime;
 	float prevTime;
 	float currTime;

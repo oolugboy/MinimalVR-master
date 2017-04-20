@@ -13,22 +13,27 @@ class FactoryScene
 public:
 	FactoryScene();
 	~FactoryScene();
-	void draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView, float deltaT);
-	void drawMolecules(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView, float deltaT);
+	void draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView);
+	void drawMolecules(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView);
 	void initMoleculesPosition();
 	void initMolecules();
 	void spawnNewMolecule();
 	vector< airMolecule * > airMolecules; //Temp
+	void update(float deltaT);
+	void updateMolecules(float deltaT);
+	void restartScene();
 	
 private:
 	Model * factoryModel;
 	glm::mat4 toWorld;
-
 	Model * cO2Model;
 	Model * o2Model;
 	Sphere * genSphere;
 	Cube * boundCube;
-	const int numMolecules = 1;	
+	bool gameRunning;
+	bool gameLost;
+	bool renderedEndScene;
+	const int numMolecules = 100;	
 	int numInSceneMolecules;
 };
 

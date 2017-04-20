@@ -118,7 +118,7 @@ void Window::display_callback(GLFWwindow* window)
 	// Use the shader of programID
 	glUseProgram(shaderProgram);
 
-	float currTime = ((float)clock() / CLOCKS_PER_SEC);
+	currTime = ((float)clock() / CLOCKS_PER_SEC);
 
 	// Render the cube
 	//	cube->draw(shaderProgram);
@@ -129,10 +129,10 @@ void Window::display_callback(GLFWwindow* window)
 		factoryScene->spawnNewMolecule();
 		prevSpawnTime = currTime;
 	}
-
-
-	factoryScene->draw(shaderProgram, P, V, currTime - prevTime);
+	factoryScene->update(currTime - prevTime);
 	prevTime = currTime;
+
+	factoryScene->draw(shaderProgram, P, V);
 
 	// Gets events, including input such as keyboard and mouse or window resizing
 	glfwPollEvents();
@@ -150,6 +150,12 @@ void Window::key_callback(GLFWwindow* window, int key, int scancode, int action,
 		{
 			// Close the window. This causes the program to also terminate.
 			glfwSetWindowShouldClose(window, GL_TRUE);
+		}
+		if (key == GLFW_KEY_R)
+		{
+			prevSpawnTime = prevTime = currTime = ((float)clock() / CLOCKS_PER_SEC);
+			factoryScene->restartScene();
+
 		}
 	}
 }

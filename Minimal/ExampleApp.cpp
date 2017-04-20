@@ -40,7 +40,6 @@ void ExampleApp::update()
 	prevTime = currTime;
 }
 
-
 void ExampleApp::renderScene(const glm::mat4 & projection, const glm::mat4 & headPose){
 
 	float currTime = ((float)clock() / CLOCKS_PER_SEC);

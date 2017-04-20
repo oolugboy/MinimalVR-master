@@ -11,7 +11,10 @@ public:
 	bool isCo2;
 	bool inScene;
 	void initWorld(glm::mat4 toWorld);
-	void updateAndDraw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView, float deltaT);
+	void update(float deltaT);
+	void draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView);
+	void printVector(glm::vec3 val);
+	void randPositon();
 	glm::vec3 position;
 	glm::vec3 velocity;
 	glm::mat4 toWorld;
