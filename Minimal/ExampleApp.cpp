@@ -25,9 +25,23 @@ void ExampleApp::shutdownGl(){
 	delete(cubeScene);
 }
 
+void ExampleApp::update()
+{
+	float currTime = ((float)clock() / CLOCKS_PER_SEC);
+
+	/* Spawn a new molecule after 2 seconds */
+	if (currTime - prevSpawnTime > 2.0f)
+	{
+		factoryScene->spawnNewMolecule();
+		prevSpawnTime = currTime;
+	}
+
+	factoryScene->update(currTime - prevTime);
+	prevTime = currTime;
+}
+
 void ExampleApp::renderScene(const glm::mat4 & projection, const glm::mat4 & headPose){
 
-	float currTime = ((float)clock() / CLOCKS_PER_SEC);
 
 	/* Load the shader program */
 	if(shadersLoaded == false)
@@ -74,15 +88,8 @@ void ExampleApp::renderScene(const glm::mat4 & projection, const glm::mat4 & hea
 		}
 	}
 
-	/* Spawn a new molecule after 2 seconds */
-	if (currTime - prevSpawnTime > 2.0f)
-	{
-		factoryScene->spawnNewMolecule();
-		prevSpawnTime = currTime;
-	}
-
 	/* draw the factory scene */
-	factoryScene->draw(vrShaderProgram, projection, glm::inverse(headPose), currTime - prevTime);
+	factoryScene->draw(vrShaderProgram, projection, glm::inverse(headPose));
 	
 	//since hands are in same orientation with the head, we pass the position and later use it to translate the hand object
 	glm::vec3 handLPos(handLPosef.Position.x, handLPosef.Position.y, handLPosef.Position.z);
@@ -93,6 +100,4 @@ void ExampleApp::renderScene(const glm::mat4 & projection, const glm::mat4 & hea
 
 	/*draw the body scene, hand and laser*/
 	bodyScene->draw(vrShaderProgram, projection, glm::inverse(headPose), handLPos, handRPos, currTime - prevTime);
-
-	prevTime = currTime;
 }
