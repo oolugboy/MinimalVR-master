@@ -17,6 +17,13 @@ public:
 	void drawHands(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view);
 	void drawLasers(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view);
 	void initLasersPosition();
+	void activateLeftLaser();
+	void activateRightLaser();
+	void deActivateLeftLaser();
+	void deActivateRightLaser();
+	void getLeftLaserData(glm::vec3 & x1, glm::vec3 & x2);
+	void getRightLaserData(glm::vec3 & x1, glm::vec3 & x2);
+
 	//vector< airMolecule * > airMolecules; //Temp
 
 private:

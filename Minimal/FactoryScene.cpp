@@ -18,7 +18,7 @@ FactoryScene::FactoryScene()
 	o2Model = new Model("../ModelAssets/o2/o2.obj");
 	cO2Model = new Model("../ModelAssets/co2/co2.obj");
 
-	genSphere = new Sphere(3.0f, true);
+	genSphere = new Sphere(1.0f, true);
 
 	boundCube = new Cube(true);
 	boundCube->scaleVal = glm::vec3(20.0f, 20.0f, 20.0f);
@@ -32,15 +32,54 @@ FactoryScene::FactoryScene()
 	gameLost = false;
 	renderedEndScene = false;
 }
+bool FactoryScene::checkSlice(glm::vec3 lBegin, glm::vec3 lEnd, glm::vec3 rBegin, glm::vec3 rEnd)
+{
+	if(!gameRunning)
+	{
+		return false;
+	}
+	bool sliced = false;
+	for (int i = 0; i < numMolecules; i++)
+	{
+		if (airMolecules[i]->inScene && airMolecules[i]->isCo2)
+		{
+			float radius = airMolecules[i]->sphere->getRadius();
+			glm::vec3 currPos = airMolecules[i]->position;
+			glm::vec3 num = glm::cross(currPos - lBegin, currPos - lEnd);
+			glm::vec3 denum = lEnd - lBegin;
+
+			float lDist = glm::distance(glm::vec3(0), num)/glm::distance(glm::vec3(0), denum);
+
+			num = glm::cross(currPos - rBegin, currPos - rEnd);
+			denum = rEnd - rBegin;
+
+			float rDist = glm::distance(glm::vec3(0), num) / glm::distance(glm::vec3(0), denum);
+
+			if (lDist < radius && rDist < radius)
+			{
+				airMolecules[i]->model = o2Model;
+				airMolecules[i]->isCo2 = false;
+				numCo2Molecules--;
+				sliced = true;
+			}
+		}
+	}	
+	return sliced;
+}
 void FactoryScene::update(float deltaT)
 {
 	if (!renderedEndScene)
 	{
 		updateMolecules(deltaT);
-		if (numInSceneMolecules >= 4)
+		if (numCo2Molecules >= 10)
 		{
 			gameRunning = false;
 			gameLost = true;
+		}
+		if (numCo2Molecules == 0)
+		{
+			gameRunning = false;
+			gameLost = false;
 		}
 	}
 }
@@ -52,6 +91,7 @@ void FactoryScene::spawnNewMolecule()
 		{
 			airMolecules[numInSceneMolecules]->inScene = true;
 			numInSceneMolecules++;
+			numCo2Molecules++;
 		}
 	}
 }
@@ -59,19 +99,39 @@ void FactoryScene::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 mo
 {
 	factoryModel->draw(shaderProgram, projection, modelView);
 	drawMolecules(shaderProgram, projection, modelView);
-	boundCube->draw(shaderProgram, projection, modelView);
-	testLine->draw(shaderProgram, projection, modelView);
+//	boundCube->draw(shaderProgram, projection, modelView);
+	//testLine->draw(shaderProgram, projection, modelView);
 }
 
 void FactoryScene::initMolecules()
 {
+	if (airMolecules.size() > 0)
+	{
+		for (int i = 0; i < numMolecules; i++)
+		{
+			delete(airMolecules[i]);
+		}
+	}
+
+	airMolecules.clear();
+
 	for (int i = 0; i < numMolecules; i++)
 	{
 		airMolecule * co2Mol = new Co2();
 
+		co2Mol->isCo2 = true;
+		co2Mol->inScene = false;
 		co2Mol->model = cO2Model;
 		co2Mol->sphere = genSphere;
 		airMolecules.push_back(co2Mol);		
+	}
+
+	/* For the first molecule in the scene */
+	if (numMolecules > 0)
+	{
+		airMolecules[0]->inScene = true;
+		numInSceneMolecules = 1;
+		numCo2Molecules = numInSceneMolecules;
 	}
 }
 void FactoryScene::restartScene()
@@ -79,6 +139,7 @@ void FactoryScene::restartScene()
 	if (gameRunning == false)
 	{
 		glClearColor(0.0f, 0.0f, 0.545f, 1.0f);
+		initMolecules();
 		initMoleculesPosition();
 		gameRunning = true;
 		gameLost = false;
@@ -131,19 +192,13 @@ void FactoryScene::drawMolecules(GLuint shaderProgram, glm::mat4 projection, glm
 		}
 	}
 }
+
 void FactoryScene::initMoleculesPosition()
 {
 	glm::mat4 offset = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.1f, 0.0f));
 	for (int i = 0; i < numMolecules; i++)
 	{
-		airMolecules[i]->inScene = false;
 		airMolecules[i]->initWorld(toWorld * offset);
-	}
-	/* For the first molecule in the scene */
-	if (numMolecules > 0)
-	{
-		airMolecules[0]->inScene = true;
-		numInSceneMolecules = 1;
 	}
 }
 FactoryScene::~FactoryScene()

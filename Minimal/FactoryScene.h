@@ -23,6 +23,8 @@ public:
 	void update(float deltaT);
 	void updateMolecules(float deltaT);
 	void restartScene();
+	bool checkSlice(glm::vec3 lBegin, glm::vec3 lEnd, glm::vec3 rBegin, glm::vec3 rEnd);
+
 	
 private:
 	Model * factoryModel;
@@ -36,6 +38,7 @@ private:
 	bool renderedEndScene;
 	const int numMolecules = 100;	
 	int numInSceneMolecules;
+	int numCo2Molecules;
 	Line * testLine;
 };
 

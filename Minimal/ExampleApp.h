@@ -23,8 +23,14 @@ public:
 	void initGl() override;
 	void shutdownGl() override; 
 	void update() override;
+	void updateControllersAction();
+	void updateControllersPosition();
 	float prevSpawnTime;
 	float prevTime;
 	float currTime;
 	void renderScene(const glm::mat4 & projection, const glm::mat4 & headPose) override;
+
+private:
+	bool leftHandTriggerPressed = false;
+	bool rightHandTriggerPressed = false;
 };

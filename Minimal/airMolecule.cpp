@@ -18,7 +18,7 @@ void airMolecule::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 mod
 
 	/* Then draw them */
 	this->model->draw(shaderProgram, projection, modelView);
-	this->sphere->draw(shaderProgram, projection, modelView);
+	//this->sphere->draw(shaderProgram, projection, modelView);
 }
 void airMolecule::printVector(glm::vec3 val)
 {
@@ -76,5 +76,5 @@ void airMolecule::initWorld(glm::mat4 toWorld)
 
 airMolecule::~airMolecule()
 {
-
+	
 }

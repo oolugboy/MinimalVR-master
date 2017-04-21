@@ -6,9 +6,10 @@
 Line::Line(glm::vec3 start)
 {
 	this->start = start;
-	this->end = this->start + glm::vec3(0.0f, 40.0f,0.0f);
+	this->end = this->start + glm::vec3(0.0f, 0.0f, -100000.0f);
 	vertices.push_back(this->start);
 	vertices.push_back(this->end);
+//	vertices.push_back(this->start + glm::vec3(1.0f, -1.0f, 0.0f));
 	this->dir = glm::normalize(end - start);
 	color = glm::vec3(0.0f, 1.0f, 0.0f);
 	toWorld = glm::mat4(1.0f);
@@ -49,6 +50,7 @@ void Line::loadLineVertices()
 void Line::setToWorld(glm::mat4 toWorld)
 {
 	this->toWorld = toWorld;
+	//this->toWorld = this->toWorld * glm::scale(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 1000.0f));
 }
 
 void Line::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView)
@@ -62,15 +64,22 @@ void Line::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 modelView)
 	// Now send these values to the shader program
 	glUniformMatrix4fv(uProjection, 1, GL_FALSE, &(projection[0][0]));
 	glUniformMatrix4fv(uModelView, 1, GL_FALSE, &(modelView[0][0]));
-	glUniform3f(uColor, 1.0f, 1.0f, 1.0f);
-
+	glUniform3f(uColor, color.x, color.y, color.z);
+	
 	// Now draw the cube. We simply need to bind the VAO associated with it.
 	glBindVertexArray(VAO);
 
-	glDrawArrays(GL_LINE, 0, 2);
+	glLineWidth(3.0f);
+
+	glDrawArrays(GL_LINES, 0, vertices.size());
 
 	// Unbind the VAO when we're done so we don't accidentally draw extra stuff or tamper with its bound buffers
 	glBindVertexArray(0);
+}
+void Line::getWorldLinePoints(glm::vec3 & begin, glm::vec3 & end)
+{
+	begin = this->toWorld * glm::vec4(this->start, 1.0f);
+	end = this->toWorld * glm::vec4(this->end, 1.0f);
 }
 Line::~Line()
 {

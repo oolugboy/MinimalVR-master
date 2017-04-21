@@ -13,6 +13,30 @@ BodyScene::BodyScene()
 	//TODO fill in laser with cylinder model
 	initLasersPosition();
 }
+void BodyScene::getLeftLaserData(glm::vec3 & x1, glm::vec3 & x2)
+{
+	leftLaser->getWorldLinePoints(x1, x2);
+}
+void BodyScene::getRightLaserData(glm::vec3 & x1, glm::vec3 & x2)
+{
+	rightLaser->getWorldLinePoints(x1, x2);
+}
+void BodyScene::activateLeftLaser()
+{
+	leftLaser->color = glm::vec3(1.0f, 0.0f, 0.0f);
+}
+void BodyScene::activateRightLaser()
+{
+	rightLaser->color = glm::vec3(1.0f, 0.0f, 0.0f);
+}
+void BodyScene::deActivateLeftLaser()
+{
+	leftLaser->color = glm::vec3(0.0f, 1.0f, 0.0f);
+}
+void BodyScene::deActivateRightLaser()
+{
+	rightLaser->color = glm::vec3(0.0f, 1.0f, 0.0f);
+}
 
 void BodyScene::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view, glm::vec3 handLPos, glm::vec3 handRPos, 
 					glm::mat4 rotationL, glm::mat4 rotationR, float deltaT)
@@ -30,11 +54,11 @@ void BodyScene::draw(GLuint shaderProgram, glm::mat4 projection, glm::mat4 view,
 
 	drawHands(shaderProgram, projection, view);
 
-	//leftLaser->setToWorld(toLLaser);
-	//rightLaser->setToWorld(toRLaser);
+	leftLaser->setToWorld(toLLaser);
+	rightLaser->setToWorld(toRLaser);
 
-	leftLaser->setToWorld(toLeft);
-	rightLaser->setToWorld(toRight);
+	//leftLaser->setToWorld(toLeft);
+	//rightLaser->setToWorld(toRight);
 
 	drawLasers(shaderProgram, projection, view);
 

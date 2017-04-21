@@ -17,6 +17,7 @@ public:
 	const int vertNum = 2;
 	void setToWorld(glm::mat4 toWorld);
 	Line(glm::vec3 start);
+	void getWorldLinePoints(glm::vec3 & begin, glm::vec3 & end);
 	~Line();
 };
 
