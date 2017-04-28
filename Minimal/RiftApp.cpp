@@ -94,7 +94,7 @@ RiftApp::RiftApp()
 		ovrMatrix4f ovrPerspectiveProjection =
 			ovrMatrix4f_Projection(erd.Fov, 0.01f, 1000.0f, ovrProjection_ClipRangeOpenGL);
 		_eyeProjections[eye] = ovr::toGlm(ovrPerspectiveProjection);
-		_viewScaleDesc.HmdToEyeOffset[eye] = erd.HmdToEyeOffset;
+		_viewScaleDesc.HmdToEyeOffset[eye] = erd.HmdToEyeOffset; // cse190 adjust the eye separation here 
 
 		ovrFovPort & fov = _sceneLayer.Fov[eye] = _eyeRenderDescs[eye].Fov;
 		auto eyeSize = ovr_GetFovTextureSize(_session, eye, fov, 1.0f);
@@ -194,6 +194,8 @@ void RiftApp::draw()
 		glViewport(vp.Pos.x, vp.Pos.y, vp.Size.w, vp.Size.h);
 		_sceneLayer.RenderPose[eye] = eyePoses[eye];
 		renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[eye]));
+//		renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[ovrEye_Left]));  // cse190: use eyePoses[ovrEye_Left] to render one eye's view to both eyes = monoscopic view
+//		if (eye==ovrEye_Left) renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[eye]));  // cse190: this is how to render to only one eye
 	});
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
@@ -208,6 +210,20 @@ void RiftApp::draw()
 	glBlitFramebuffer(0, 0, _mirrorSize.x, _mirrorSize.y, 0, _mirrorSize.y, _mirrorSize.x, 0, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 }
+/* Probably have to redo the update function
+void update() final override
+{
+	ovrInputState inputState;
+	if (OVR_SUCCESS(ovr_GetInputState(_session, ovrControllerType_Touch, &inputState)))
+	{
+		if (inputState.HandTrigger[ovrHand_Right] > 0.5f)   cerr << "right middle trigger pressed" << endl;
+		if (inputState.IndexTrigger[ovrHand_Right] > 0.5f)	cerr << "right index trigger pressed" << endl;
+		if (inputState.HandTrigger[ovrHand_Left] > 0.5f)    cerr << "left middle trigger pressed" << endl;
+		if (inputState.IndexTrigger[ovrHand_Left] > 0.5f)	cerr << "left index trigger pressed" << endl;
+		if (inputState.Buttons>0) cerr << "Botton state:" << inputState.Buttons << endl;
+		// cse190: no need to print the above messages
+	}
+} */
 RiftApp::~RiftApp()
 {
 }

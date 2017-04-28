@@ -142,6 +142,7 @@ void glDebugCallbackHandler(GLenum source, GLenum type, GLuint id, GLenum severi
 #include "RiftApp.h"
 #include "ColorCubeScene.h"
 #include "ExampleApp.h"
+#include "Project2App.h"
 
 // Execute our example class
 /* The vr main */
@@ -152,7 +153,8 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 		if (!OVR_SUCCESS(ovr_Initialize(nullptr))) {
 			FAIL("Failed to initialize the Oculus SDK");
 		}
-		result = ExampleApp().run();
+		//result = ExampleApp().run();
+		result = Project2App().run();
 	}
 	catch (std::exception & error) {
 		OutputDebugStringA(error.what());
@@ -262,4 +264,5 @@ int main(void)
 	glfwTerminate();
 
 	exit(EXIT_SUCCESS);
-} */
+} 
+*/

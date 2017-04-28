@@ -72,11 +72,20 @@
     <ClCompile Include="Line.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Project2App.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="vr_fragment_shader.frag" />
     <None Include="vr_vertex_shader.vert" />
+    <None Include="t_vertex_shader.vert" />
+    <None Include="t_fragment_shader.frag" />
+    <None Include="vr_test_pattern.ppm" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RiftManagerApp.h">
@@ -134,6 +143,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Line.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Project2App.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

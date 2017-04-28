@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "ColorCubeScene.h"
 #include "FactoryScene.h"
 #include <time.h>
 
@@ -7,12 +8,18 @@ FactoryScene * factoryScene;
 const char* window_title = "GLFW Starter Project";
 Cube * cube;
 GLint shaderProgram;
+GLint tShaderProgram;
+ColorCubeScene * cubeScene;
 
 float currTime, prevTime, prevSpawnTime;
 
 // On some systems you need to change this to the absolute path
 #define VERTEX_SHADER_PATH "./vr_vertex_shader.vert"
 #define FRAGMENT_SHADER_PATH "./vr_fragment_shader.frag"
+
+#define T_VERTEX_SHADER_PATH "./t_vertex_shader.vert"
+#define T_FRAGMENT_SHADER_PATH "./t_fragment_shader.frag"
+
 
 // Default camera parameters
 glm::vec3 cam_pos(0.0f, 0.0f, 20.0f);		// e  | Position of camera
@@ -29,11 +36,15 @@ void Window::initialize_objects()
 {
 	cube = new Cube(false);
 	factoryScene = new FactoryScene();
+	cubeScene = new ColorCubeScene();
+	cubeScene->loadTextures("vr_test_pattern.ppm");
 
 	prevSpawnTime = currTime = prevTime = ((float)clock() / CLOCKS_PER_SEC);
 
 	// Load the shader program. Make sure you have the correct filepath up top
 	shaderProgram = LoadShaders(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
+
+	tShaderProgram = LoadShaders(T_VERTEX_SHADER_PATH, T_FRAGMENT_SHADER_PATH);
 }
 
 // Treat this as a destructor function. Delete dynamically allocated memory here.
@@ -108,6 +119,7 @@ void Window::idle_callback()
 {
 	// Call the update function the cube
 	cube->update();
+
 }
 
 void Window::display_callback(GLFWwindow* window)
@@ -116,14 +128,16 @@ void Window::display_callback(GLFWwindow* window)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Use the shader of programID
-	glUseProgram(shaderProgram);
+	glUseProgram(tShaderProgram);
 
 	currTime = ((float)clock() / CLOCKS_PER_SEC);
-
-	// Render the cube
-	//	cube->draw(shaderProgram);
+	
+	// Update the cubeScene
+	cubeScene->update();
+	// Render the cubeScene
+	cubeScene->render(P, V, tShaderProgram);
 	/* Spawn a new molecule after 2 seconds */
-	if (currTime - prevSpawnTime > 2.0f)
+	/*if (currTime - prevSpawnTime > 2.0f)
 	{
 		cout << " The currTime " << currTime << " the prevSpawn " << prevSpawnTime << endl;
 		factoryScene->spawnNewMolecule();
@@ -132,7 +146,7 @@ void Window::display_callback(GLFWwindow* window)
 	factoryScene->update(currTime - prevTime);
 	prevTime = currTime;
 
-	factoryScene->draw(shaderProgram, P, V);
+	factoryScene->draw(shaderProgram, P, V);*/
 
 	// Gets events, including input such as keyboard and mouse or window resizing
 	glfwPollEvents();

@@ -6,6 +6,7 @@
 
 bool shadersLoaded = false;
 
+
 ExampleApp::ExampleApp()
 {
 	prevSpawnTime = currTime = prevTime = ((float)clock() / CLOCKS_PER_SEC);
@@ -16,7 +17,6 @@ void ExampleApp::initGl(){
 	glClearColor(0.0f, 0.0f, 0.545f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	ovr_RecenterTrackingOrigin(_session);
-	cubeScene = new ColorCubeScene();
 	factoryScene = new FactoryScene();
 	bodyScene = new BodyScene();
 }
