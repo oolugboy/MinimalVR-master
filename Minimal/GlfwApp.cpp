@@ -7,7 +7,7 @@ GlfwApp::GlfwApp()
 	if (!glfwInit()) {
 		FAIL("Failed to initialize GLFW");
 	}
-	glfwSetErrorCallback(ErrorCallback);
+	glfwSetErrorCallback(ErrorCallback);	
 }
 
 GlfwApp::~GlfwApp() {
@@ -16,6 +16,7 @@ GlfwApp::~GlfwApp() {
 	}
 	glfwTerminate();
 }
+
 int GlfwApp::run() {
 	preCreate();
 

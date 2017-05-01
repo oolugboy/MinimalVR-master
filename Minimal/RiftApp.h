@@ -5,6 +5,13 @@
 class RiftApp : public GlfwApp, public RiftManagerApp 
 {
 	public:
+		void nextDispIndex();
+
+		int getDispIndex();
+
+		void nextTrackIndex();
+
+		int getTrackIndex();
 
 	private:
 	GLuint _fbo{ 0 };
@@ -40,6 +47,10 @@ class RiftApp : public GlfwApp, public RiftManagerApp
 	virtual void renderScene(const glm::mat4 & projection, const glm::mat4 & headPose) = 0;
 
 	~RiftApp();
+
+	private:
+		int dispIndex;
+		int trackIndex;
 };
 
 

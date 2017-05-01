@@ -167,6 +167,11 @@ void RiftApp::initGl(){
 		FAIL("Could not create mirror texture");
 	}
 	glGenFramebuffers(1, &_mirrorFbo);
+
+	/* Initialize the display index */
+	dispIndex = 0;
+	/* Initialize the tracking index */
+	trackIndex = 0;
 }
 void RiftApp::onKey(int key, int scancode, int action, int mods){
 	if (GLFW_PRESS == action) switch (key) {
@@ -193,9 +198,20 @@ void RiftApp::draw()
 		const auto& vp = _sceneLayer.Viewport[eye];
 		glViewport(vp.Pos.x, vp.Pos.y, vp.Size.w, vp.Size.h);
 		_sceneLayer.RenderPose[eye] = eyePoses[eye];
-		renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[eye]));
-//		renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[ovrEye_Left]));  // cse190: use eyePoses[ovrEye_Left] to render one eye's view to both eyes = monoscopic view
-//		if (eye==ovrEye_Left) renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[eye]));  // cse190: this is how to render to only one eye
+		if(getDispIndex() == 0)
+			renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[eye])); //cse190: this is for normal studio rendering 
+		if(getDispIndex() == 1)
+			renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[ovrEye_Left]));  // cse190: use eyePoses[ovrEye_Left] to render one eye's view to both eyes = monoscopic view
+		if(getDispIndex() == 2)
+		{
+			if (eye==ovrEye_Left) 
+				renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[eye]));  // cse190: this is how to render to only one eye
+		}
+		if (getDispIndex() == 3)
+		{
+			if (eye == ovrEye_Right)
+				renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[eye]));  // cse190: this is how to render to only one eye
+		}
 	});
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
@@ -209,6 +225,22 @@ void RiftApp::draw()
 	glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mirrorTextureId, 0);
 	glBlitFramebuffer(0, 0, _mirrorSize.x, _mirrorSize.y, 0, _mirrorSize.y, _mirrorSize.x, 0, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+}
+void RiftApp::nextDispIndex()
+{
+	dispIndex = (dispIndex + 1) % 4;
+}
+int RiftApp::getDispIndex()
+{
+	return dispIndex;
+}
+void RiftApp::nextTrackIndex()
+{
+	trackIndex = (trackIndex + 1) % 4;
+}
+int RiftApp::getTrackIndex()
+{
+	return trackIndex;
 }
 /* Probably have to redo the update function
 void update() final override

@@ -6,7 +6,7 @@ ColorCubeScene::ColorCubeScene()
 {
 	cube = new Cube(false);
 	cube->scaleVal = glm::vec3(1.0f, 1.0f, 1.0f);
-	toWorld = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -20.0f));
+	toWorld = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -30.0f));
 	toWorld = toWorld * glm::scale(glm::mat4(1.0f), glm::vec3(10.0f, 10.0f, 10.0f));
 	cube->setToWorld(toWorld);
 }
@@ -20,7 +20,7 @@ void ColorCubeScene::loadTextures(const char * fileName)
 }
 void ColorCubeScene::update()
 {
-	cube->spin(1.0f);
+	//cube->spin(1.0f);
 }
 ColorCubeScene::~ColorCubeScene()
 {

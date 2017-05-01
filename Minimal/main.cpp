@@ -146,7 +146,6 @@ void glDebugCallbackHandler(GLenum source, GLenum type, GLuint id, GLenum severi
 
 // Execute our example class
 /* The vr main */
-
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	int result = -1;
 	try {
@@ -264,5 +263,4 @@ int main(void)
 	glfwTerminate();
 
 	exit(EXIT_SUCCESS);
-} 
-*/
+} */

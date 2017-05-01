@@ -89,4 +89,5 @@ private:
 	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
 	static void ErrorCallback(int error, const char* description);
+
 };
