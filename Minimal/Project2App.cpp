@@ -1,10 +1,13 @@
+#include <Windows.h>
 #include "Project2App.h"
+
 #define T_VERTEX_SHADER_PATH "./t_vertex_shader.vert"
 #define T_FRAGMENT_SHADER_PATH "./t_fragment_shader.frag"
 
-bool xPressed = false;
-bool yPressed = false;
-bool renderedFirst = false;
+bool aPressed = false;
+bool bPressed = false;
+bool renderedRightFirst = false, renderedLeftFirst = false;
+bool leftJoyEvent = false;
 
 Project2App::Project2App()
 {
@@ -27,13 +30,10 @@ void Project2App::shutdownGl() {
 void Project2App::update()
 {
     /* only just spin the cube */
-	cubeScene->update();
 	updateControllersAction();
-	
+	cubeScene->update();	
 }
 void Project2App::renderScene(const glm::mat4 & projection, const glm::mat4 & headPose) {
-
-	glm::mat4 newHeadPose = headPose;
 
 	/* Load the shader program */
 	if (loadedShaders == false)
@@ -42,17 +42,39 @@ void Project2App::renderScene(const glm::mat4 & projection, const glm::mat4 & he
 		loadedShaders = true;
 	}
 	glUseProgram(vrShaderProgram);
-	glm::mat4 view;
+	
+	glm::mat4 newHeadPose = headPose;
+	glm::mat4 oldHeadPose;
+
+	if (isRenderingLeft())
+		oldHeadPose = oldLeftHeadPose;
+	else
+		oldHeadPose = oldRightHeadPose;
+
 	if (getTrackIndex() == 0)
 	{
-		if (renderedFirst)
+		if(isRenderingLeft())
 		{
-			newHeadPose = oldHeadPose;			
-		}
+			if (renderedLeftFirst)
+			{
+				newHeadPose = oldHeadPose;			
+			}
+			else
+			{
+				renderedLeftFirst = true;
+			}	
+		}	
 		else
 		{
-			renderedFirst = true;
-		}		
+			if (renderedRightFirst)
+			{
+				newHeadPose = oldHeadPose;
+			}
+			else
+			{
+				renderedRightFirst = true;
+			}
+		}
 	}
 	if (getTrackIndex() == 1)
 	{		
@@ -67,36 +89,80 @@ void Project2App::renderScene(const glm::mat4 & projection, const glm::mat4 & he
 	
 	cubeScene->render(projection, glm::inverse(newHeadPose), vrShaderProgram);	
 
-	oldHeadPose = newHeadPose;
+	/* Check if rendering the left eye or right eye */
+	if(isRenderingLeft())
+		oldLeftHeadPose = newHeadPose;
+	else
+		oldRightHeadPose = newHeadPose;
 }
 void Project2App::updateControllersAction() {
 
 	ovrInputState inputState;
 	if (OVR_SUCCESS(ovr_GetInputState(_session, ovrControllerType_Touch, &inputState))) {
 		
-		if (inputState.Buttons == ovrTouch_X)
+		if (inputState.Buttons == ovrTouch_A)
 		{
-			if(!xPressed)
+			if(!aPressed)
 			{
 				nextDispIndex();
-				xPressed = true;
+				aPressed = true;
 			}
 		}
 		else
 		{
-			xPressed = false;
+			aPressed = false;
 		}
-		if (inputState.Buttons == ovrTouch_Y)
+		if (inputState.Buttons == ovrTouch_B)
 		{
-			if (!yPressed)
+			if (!bPressed)
 			{
 				nextTrackIndex();
-				yPressed = true;
+				bPressed = true;
 			}
 		}
 		else
 		{
-			yPressed = false;
+			bPressed = false;
+		}
+		if (inputState.Thumbstick[ovrHand_Right].x < 0.000f)
+		{
+			decrIOD();
+		}
+		if (inputState.Thumbstick[ovrHand_Right].x > 0.000f)
+		{
+			incrIOD();
+		}
+		if (inputState.Buttons == ovrButton_RThumb)
+		{
+			resetIOD();
+		}
+		if (inputState.Thumbstick[ovrHand_Left].x < 0.000f)
+		{
+			/*if(!leftJoyEvent)
+			{*/
+				cubeScene->contractCube();
+				leftJoyEvent = true;
+			//}
+		}
+		else if (inputState.Thumbstick[ovrHand_Left].x > 0.000f)
+		{
+			/*if(!leftJoyEvent)
+			{*/
+				cubeScene->expandCube();
+				leftJoyEvent = true;
+			//}
+		}
+		else if (inputState.Buttons == ovrButton_LThumb)
+		{
+			/*if(!leftJoyEvent)
+			{*/
+				cubeScene->resetCubeSize();
+				leftJoyEvent = true;
+			//}
+		}
+		else
+		{
+			leftJoyEvent = false;
 		}
 	}
 }

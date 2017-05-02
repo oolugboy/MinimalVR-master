@@ -17,6 +17,8 @@ protected:
 	void initGl() override;
 	void shutdownGl() override;
 	void update() override;
-	glm::mat4 oldHeadPose;
+
+	glm::mat4 oldLeftHeadPose;
+	glm::mat4 oldRightHeadPose;
 };
 

@@ -1,5 +1,7 @@
+#include <Windows.h>
 #include "RiftApp.h"
 #include <algorithm>
+
 
 namespace ovr {
 	// Convenience method for looping over each eye with a lambda
@@ -95,7 +97,7 @@ RiftApp::RiftApp()
 			ovrMatrix4f_Projection(erd.Fov, 0.01f, 1000.0f, ovrProjection_ClipRangeOpenGL);
 		_eyeProjections[eye] = ovr::toGlm(ovrPerspectiveProjection);
 		_viewScaleDesc.HmdToEyeOffset[eye] = erd.HmdToEyeOffset; // cse190 adjust the eye separation here 
-
+		
 		ovrFovPort & fov = _sceneLayer.Fov[eye] = _eyeRenderDescs[eye].Fov;
 		auto eyeSize = ovr_GetFovTextureSize(_session, eye, fov, 1.0f);
 		_sceneLayer.Viewport[eye].Size = eyeSize;
@@ -104,6 +106,11 @@ RiftApp::RiftApp()
 		_renderTargetSize.y = std::max(_renderTargetSize.y, (uint32_t)eyeSize.h);
 		_renderTargetSize.x += eyeSize.w;
 	});
+
+	/* Store the default eye offsets */
+	defLeftEyeOffset = _viewScaleDesc.HmdToEyeOffset[ovrEye_Left];
+	defRightEyeOffset = _viewScaleDesc.HmdToEyeOffset[ovrEye_Right];
+
 	// Make the on screen window 1/4 the resolution of the render target
 	_mirrorSize = _renderTargetSize;
 	_mirrorSize /= 4;
@@ -173,6 +180,10 @@ void RiftApp::initGl(){
 	/* Initialize the tracking index */
 	trackIndex = 0;
 }
+bool RiftApp::isRenderingLeft()
+{
+	return renderingLeft;
+}
 void RiftApp::onKey(int key, int scancode, int action, int mods){
 	if (GLFW_PRESS == action) switch (key) {
 	case GLFW_KEY_R:
@@ -182,9 +193,21 @@ void RiftApp::onKey(int key, int scancode, int action, int mods){
 
 	GlfwApp::onKey(key, scancode, action, mods);
 }
+
 void RiftApp::draw()
 {
 	ovrPosef eyePoses[2];
+	float leftEyeOff = _viewScaleDesc.HmdToEyeOffset[ovrEye_Left].x;
+	float rightEyeOff = _viewScaleDesc.HmdToEyeOffset[ovrEye_Right].x;
+
+	/*char buff[100];
+	sprintf_s(buff, " rightEyeOff %f ", rightEyeOff);
+	OutputDebugStringA(buff);
+
+	char buff1[100];
+	sprintf_s(buff1, " leftEyeOff %f \n", leftEyeOff);
+	OutputDebugStringA(buff1);*/
+
 	ovr_GetEyePoses(_session, frame, true, _viewScaleDesc.HmdToEyeOffset, eyePoses, &_sceneLayer.SensorSampleTime);
 
 	int curIndex;
@@ -198,6 +221,16 @@ void RiftApp::draw()
 		const auto& vp = _sceneLayer.Viewport[eye];
 		glViewport(vp.Pos.x, vp.Pos.y, vp.Size.w, vp.Size.h);
 		_sceneLayer.RenderPose[eye] = eyePoses[eye];
+		/* Need this check to know whether I am rendering for the left or right eye */
+		if (eye == ovrEye_Left)
+		{
+			renderingLeft = true;
+		}
+		else
+		{
+			renderingLeft = false;
+		}
+
 		if(getDispIndex() == 0)
 			renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[eye])); //cse190: this is for normal studio rendering 
 		if(getDispIndex() == 1)
@@ -205,12 +238,12 @@ void RiftApp::draw()
 		if(getDispIndex() == 2)
 		{
 			if (eye==ovrEye_Left) 
-				renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[eye]));  // cse190: this is how to render to only one eye
+				renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[eye]));  // cse190: this is how to render to only left eye
 		}
 		if (getDispIndex() == 3)
 		{
 			if (eye == ovrEye_Right)
-				renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[eye]));  // cse190: this is how to render to only one eye
+				renderScene(_eyeProjections[eye], ovr::toGlm(eyePoses[eye]));  // cse190: this is how to render to only right eye
 		}
 	});
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
@@ -241,6 +274,37 @@ void RiftApp::nextTrackIndex()
 int RiftApp::getTrackIndex()
 {
 	return trackIndex;
+}
+void RiftApp::decrIOD()
+{
+	float leftEyeOff = _viewScaleDesc.HmdToEyeOffset[ovrEye_Left].x;
+	float rightEyeOff = _viewScaleDesc.HmdToEyeOffset[ovrEye_Right].x;
+
+	if ((rightEyeOff - leftEyeOff) > 0.00000001f)
+	{
+		_viewScaleDesc.HmdToEyeOffset[ovrEye_Left].x += 0.1f;
+		_viewScaleDesc.HmdToEyeOffset[ovrEye_Right].x -= 0.1f;
+	}
+}
+void RiftApp::incrIOD()
+{
+	float leftEyeOff = _viewScaleDesc.HmdToEyeOffset[ovrEye_Left].x;
+	float rightEyeOff = _viewScaleDesc.HmdToEyeOffset[ovrEye_Right].x;
+
+	if((rightEyeOff - leftEyeOff) < 100.0f)
+	{
+		_viewScaleDesc.HmdToEyeOffset[ovrEye_Left].x -= 0.1f;
+		_viewScaleDesc.HmdToEyeOffset[ovrEye_Right].x += 0.1f;
+	}
+}
+void RiftApp::resetIOD()
+{
+	/*char buff[100];
+	sprintf_s(buff, " In the incrIOD \n");
+	OutputDebugStringA(buff);*/
+
+	_viewScaleDesc.HmdToEyeOffset[ovrEye_Left] = defLeftEyeOffset;
+	_viewScaleDesc.HmdToEyeOffset[ovrEye_Right] = defRightEyeOffset;	
 }
 /* Probably have to redo the update function
 void update() final override

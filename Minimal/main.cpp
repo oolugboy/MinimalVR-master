@@ -152,6 +152,12 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 		if (!OVR_SUCCESS(ovr_Initialize(nullptr))) {
 			FAIL("Failed to initialize the Oculus SDK");
 		}
+		
+		AllocConsole();
+		freopen("conin$", "r", stdin);
+		freopen("conout$", "w", stdout);
+		freopen("conout$", "w", stderr);
+	
 		//result = ExampleApp().run();
 		result = Project2App().run();
 	}

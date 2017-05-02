@@ -13,6 +13,14 @@ class RiftApp : public GlfwApp, public RiftManagerApp
 
 		int getTrackIndex();
 
+		bool isRenderingLeft();
+
+		void decrIOD();
+
+		void incrIOD();
+
+		void resetIOD();
+
 	private:
 	GLuint _fbo{ 0 };
 	GLuint _depthBuffer{ 0 };
@@ -51,6 +59,8 @@ class RiftApp : public GlfwApp, public RiftManagerApp
 	private:
 		int dispIndex;
 		int trackIndex;
+		bool renderingLeft;
+		ovrVector3f defLeftEyeOffset, defRightEyeOffset;
 };
 
 

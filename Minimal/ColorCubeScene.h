@@ -14,6 +14,11 @@ public:
 	void render(const mat4 & projection, const mat4 & modelview, GLint shaderProgram);
 	void loadTextures(const char * fileName);
 	void update();
+	void expandCube();
+	void contractCube();
+	void resetCubeSize();
 	~ColorCubeScene();
+private:
+	float cubeScaleVal;
 };
 
